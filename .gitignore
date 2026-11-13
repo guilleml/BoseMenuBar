@@ -1,0 +1,22 @@
+# macOS
+.DS_Store
+
+# Compilación de Swift Package Manager y Xcode
+.build/
+.swiftpm/
+app/build/
+DerivedData/
+xcuserdata/
+*.xcuserstate
+
+# Datos personales: NO publicar.
+# Capturas Bluetooth y bugreports contienen MAC, números de serie y datos del teléfono.
+docs/captures/
+*.log
+*.btsnoop
+*.pcap
+*.pcapng
+bugreport*.zip
+# Salidas sin filtrar de system_profiler / bt-discover (MAC de todos los dispositivos emparejados).
+# El resumen sin datos personales está en docs/discovery/README.md.
+docs/discovery/*.txt
