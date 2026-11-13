@@ -22,7 +22,21 @@ to discover and test the protocol.
 
 The app's user interface is currently in Spanish.
 
-## Requirements
+## Install
+
+1. Download `BoseMenuBar-<version>.zip` from the [latest release](https://github.com/guilleml/BoseMenuBar/releases/latest)
+   and unzip it. The app is a universal binary (Apple Silicon and Intel) and requires macOS 13 or later.
+2. Move `BoseMenuBar.app` to `/Applications`.
+3. The app is not signed with an Apple Developer ID or notarized, so macOS blocks it the first
+   time. Either:
+   - try to open it, then go to **System Settings → Privacy & Security** and click **Open Anyway**; or
+   - remove the quarantine attribute in Terminal:
+     `xattr -dr com.apple.quarantine /Applications/BoseMenuBar.app`
+4. Allow Bluetooth access when asked. The earbuds must already be paired with the Mac.
+
+To start it automatically, add it in **System Settings → General → Login Items**.
+
+## Requirements (to build from source)
 
 - macOS 13 or later.
 - Xcode 16 or later (tested with Xcode 26.5 and Swift 6.3).
