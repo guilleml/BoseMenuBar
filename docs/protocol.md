@@ -220,7 +220,22 @@ modos personalizados.
 - **[observado en Android]** Banda 1 (Medio): 0 → +1 → −1 → 0 con `01 07 02 02 <valor> 01`. Cada
   respuesta `01 07 03 0c` trae las 3 bandas y solo cambia la banda 1; −1 se recibe como `ff`.
 
-### 8.5 Otros mensajes del volcado (sin uso previsto)
+### 8.5 Estuche y apagado
+
+- **[observado en Android, 17-11-2026]** Con el canal de control abierto, los auriculares tardaron en
+  desconectarse ~2 min 40 s tras cerrar la tapa del estuche (cierre ~14:01:00, el sistema pierde el
+  enlace a las 14:03:39) y ~3 min en una prueba anterior (~13:49 → 13:52:19). Sin el canal abierto
+  (app en segundo plano), el enlace cayó a los pocos segundos (conexión 14:04:23, desconexión 14:04:34).
+  **[hipótesis]** un canal RFCOMM abierto retrasa el apagado en el estuche. Pocas muestras.
+- **[observado en Android]** Al apagarse, se cierran a la vez el audio (A2DP/HFP) y el canal RFCOMM
+  (la lectura del socket devuelve fin de flujo).
+- **[observado en Android]** Con la tapa cerrada y el canal aún abierto, `02 02 03` seguía trayendo los
+  ids 01 y 02 (14:02:49). Matiza la hipótesis de §4 (id ausente = auricular en el estuche): quizá solo
+  aplica con la tapa abierta. **[pendiente de confirmar]**
+- **[observado en Android]** Con los auriculares apagados en el estuche cerrado, abrir RFCOMM falla a los
+  ~5 s y no los vuelve a conectar (5 intentos seguidos, 13:58:35–13:59:47).
+
+### 8.6 Otros mensajes del volcado (sin uso previsto)
 
 - **[observado en Android]** `01 00 03 05` y `02 00 03 05` contienen el texto ASCII `1.1.0`.
   **[hipótesis]** versión de firmware.
