@@ -176,6 +176,55 @@
 2. ~~Comando para Aware~~ Confirmado (sección 3.3).
 3. Petición directa de batería (sección 4). Además, `02 01 05` devolvió a las 17:0x los mismos
    valores que la captura (100/100/100/90): **[pendiente de confirmar]** que el dato se actualice.
+   **[observado en Android, 17-11-2026]** El estuche pasó a `0x50` (80 %): el dato sí se actualiza (sección 8).
 4. Sugerencia para una segunda captura corta: Quiet → Aware → Immersion → Aware → Quiet,
    ~10 s entre pasos, apuntando la hora; abrir la pantalla de batería con el estuche abierto y
    luego cerrado.
+
+## 8. Observaciones en Android
+
+Con la app Android ([boseAndroidMgr](https://github.com/guilleml/boseAndroidMgr)) en un
+Pixel 11 Pro con Android 17, 17-11-2026, 13:05–13:16. Se ha omitido el nombre de los
+modos personalizados.
+
+### 8.1 Transporte
+
+- **[observado en Android]** `BluetoothDevice.createRfcommSocketToServiceRecord(UUID 0x1101)`
+  abre el canal de control: los auriculares responden a los comandos de las secciones 3–5. La API
+  pública no informa del número de canal RFCOMM elegido por SDP. **[hipótesis]** es el 2.
+- **[observado en Android]** Tampoco hace falta la secuencia inicial ni el túnel `0d` (como en §7.1).
+- **[observado en Android]** El canal se abre y funciona con el proceso de la app oficial en
+  ejecución. **[pendiente de confirmar]** si la app oficial tenía su canal abierto en ese momento.
+- **[observado en Android]** Una vez, los auriculares cerraron el canal (fin de flujo) ~0,5 s después
+  de responder a las lecturas iniciales, justo después de que se abriera la app oficial. No se repitió en las
+  conexiones siguientes. **[pendiente de confirmar]** la causa.
+
+### 8.2 Modos
+
+- **[observado en Android]** `→ 1f 06 05 00` ⇒ `← 1f 06 07 00`, 11 × `← 1f 06 03 30 …`, `← 1f 06 06 00`.
+  El registro de la ranura 01 «Aware» coincide byte a byte con el de la captura.
+- Nota sobre §3.1: el nombre empieza en el byte 7 de la carga contando desde 1, es decir, en el
+  índice 6 contando desde 0 (lo que usan BoseKit y la app Android).
+- **[observado en Android]** `→ 1f 03 01 00` ⇒ `← 1f 03 03 01 <idx>`.
+- **[observado en Android]** Quiet → Aware → Immersion → Quiet con `1f 03 05 02 <idx> 01`: la única
+  confirmación es `← 1f 03 06 01 <idx>`, en 0,2–0,7 s. No llegaron `1f 03 03` ni `1f 0a` (igual que con bt-control, §3.3).
+
+### 8.3 Batería
+
+- **[observado en Android]** `02 02 03 10 | 64 ff ff 01 | 64 ff ff 02 | 64 ff ff 04 | 50 ff ff 03`:
+  auriculares al 100 % y estuche (id 03) al 80 %. El dato se actualiza respecto a la captura (90 %).
+
+### 8.4 Ecualizador
+
+- **[observado en Android]** Estado leído: `f6 0a 07 00 | f6 0a 00 01 | f6 0a 07 02` (+7 / 0 / +7).
+- **[observado en Android]** Banda 1 (Medio): 0 → +1 → −1 → 0 con `01 07 02 02 <valor> 01`. Cada
+  respuesta `01 07 03 0c` trae las 3 bandas y solo cambia la banda 1; −1 se recibe como `ff`.
+
+### 8.5 Otros mensajes del volcado (sin uso previsto)
+
+- **[observado en Android]** `01 00 03 05` y `02 00 03 05` contienen el texto ASCII `1.1.0`.
+  **[hipótesis]** versión de firmware.
+- **[observado en Android]** `02 14 03 04` cambia entre lecturas: `00 00 85 7d` (13:05:41),
+  `00 00 85 90` (13:06:00), `00 00 87 0c` (13:12:20). **[pendiente de confirmar]** significado.
+- **[observado en Android]** `02 05 03 01` valía `01` (13:05–13:06) y `00` (13:12–13:13).
+  **[pendiente de confirmar]** significado.
